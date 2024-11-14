@@ -9,7 +9,7 @@ namespace LeakyPlayTelegramBot
 {
    class Program
    {
-      public const string ConfigTokenKey = "TgBotConfig:BotToken";
+      private const string ConfigTokenKey = "TgBotConfig:BotToken";
       static async Task Main(string[] args)
       {
          // wrapper for user secrets
