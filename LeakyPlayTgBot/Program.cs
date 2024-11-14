@@ -17,17 +17,18 @@ namespace LeakyPlayTelegramBot
             .AddUserSecrets<Program>()
             .Build();
 
-         if (config[ConfigTokenKey] is not string token)
+         if (config[ConfigTokenKey] is not string botToken)
          {
             throw new ArgumentNullException($"{ConfigTokenKey} is not defined correctly");
          }
+         var cts = new CancellationTokenSource();
+         var client = new TelegramBotClient(botToken);
 
-         var client = new TelegramBotClient(token);
          ReceiverOptions receiverOptions = new()
          {
             AllowedUpdates = []
          };
-         client.StartReceiving(Update, Error, receiverOptions: receiverOptions);
+         client.StartReceiving(Update, Error, receiverOptions: receiverOptions, cancellationToken: cts.Token);
          Console.ReadLine();
       }
 
