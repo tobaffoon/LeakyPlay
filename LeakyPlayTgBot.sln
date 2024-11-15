@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeakyPlayTgBot", "LeakyPlayTgBot\LeakyPlayTgBot.csproj", "{FCB200A3-6F37-4F30-B83D-592990E98B00}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stateless", "stateless", "{6EB03968-7E45-4081-B5F7-83775F8F5562}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7F9A6793-13D7-436C-BBE3-8F0527179F33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stateless", "stateless\src\Stateless\Stateless.csproj", "{CA842CEE-AA34-42CF-A2A7-FD8D0333471B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeakyPlayTgBotNet", "LeakyPlayTgBotNet\LeakyPlayTgBotNet.csproj", "{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +17,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FCB200A3-6F37-4F30-B83D-592990E98B00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCB200A3-6F37-4F30-B83D-592990E98B00}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCB200A3-6F37-4F30-B83D-592990E98B00}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCB200A3-6F37-4F30-B83D-592990E98B00}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA842CEE-AA34-42CF-A2A7-FD8D0333471B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA842CEE-AA34-42CF-A2A7-FD8D0333471B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA842CEE-AA34-42CF-A2A7-FD8D0333471B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA842CEE-AA34-42CF-A2A7-FD8D0333471B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

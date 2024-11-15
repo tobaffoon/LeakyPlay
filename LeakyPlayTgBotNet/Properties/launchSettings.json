@@ -1,0 +1,11 @@
+﻿{
+   "$schema": "https://json.schemastore.org/launchsettings.json",
+   "profiles": {
+      "LeakyPlayTgBot": {
+         "commandName": "Project",
+         "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
+         }
+      }
+   }
+}
