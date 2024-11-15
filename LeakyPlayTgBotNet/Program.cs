@@ -2,7 +2,6 @@ using LeakyPlayTgBotNet.PollService;
 using LeakyPlayTgBotNet.ReceiveService;
 using LeakyPlayTgBotNet.UpdateService;
 using LeakyPlayTgBotNet.TelegramBot;
-using Microsoft.Extensions.Options;
 using Telegram.Bot;
 
 namespace LeakyPlayTgBotNet
