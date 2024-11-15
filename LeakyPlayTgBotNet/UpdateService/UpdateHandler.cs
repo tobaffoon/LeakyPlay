@@ -58,91 +58,93 @@ public class UpdateHandler : IUpdateHandler
       _logger.LogInformation("The message was sent with id: {SentMessageId}", sentMessage.Id);
    }
 
-   async Task<Message> OnUnknownCommand(Message msg)
+   private async Task<Message> OnUnknownCommand(Message msg)
    {
       const string getHelp = """
-               Unknown command =/
-               Enter /help to get list of commands
-      """;
-      return await _bot.SendMessage(msg.Chat, getHelp);
+         Unknown command =/
+         Enter /help to get list of commands
+         """;
+      return await _bot.SendMessage(msg.Chat, getHelp, replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> SendHelp(Message msg)
+   private async Task<Message> SendHelp(Message msg)
    {
       const string usage = """
                <b><u>Bot menu</u></b>:
-               /help - Get list of commands
-               /create - Create virtual room with single combined playlist
-               /enter - Pass <roomID> to enter existing virtual room 
-               /change_room - Pass <roomID> to enter a new room
-               /leave - Leave current room
-               /add - Pass <link> to add a playlist to combination list by link
-               /delete - See combination list and choose a playlist to delete
-               /delete_id - Pass <playlistId> to delete a playlist
-               /combine - Update combined playlist
-               /artists - Show all unique artists in current combined playlist
-               /playlists - Show all playlists in combination list
-               /members - Show all users in same room with you
+            
+            /help - Get list of commands
+            /create - Create virtual room with single combined playlist
+            /enter - Pass &lt;roomID&gt; to enter existing virtual room 
+            /change_room - Pass &lt;roomID&gt; to enter a new room
+            /leave - Leave current room
+            /add - Pass &lt;link&gt; to add a playlist to combination list by link
+            /delete - See combination list and choose a playlist to delete
+            /delete_id - Pass &lt;playlistId&gt; to delete a playlist
+            /combine - Update combined playlist
+            /artists - Show all unique artists in current combined playlist
+            /playlists - Show all playlists in combination list
+            /members - Show all users in same room with you
             """;
-      return await _bot.SendMessage(msg.Chat, usage, parseMode: ParseMode.Html);
+      return await _bot.SendMessage(msg.Chat, usage, parseMode: ParseMode.Html, replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> CreateRoom(Message msg)
+   private async Task<Message> CreateRoom(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! Room created");
+      return await _bot.SendMessage(msg.Chat, "WOW! Room created", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> EnterRoom(Message msg)
+   private async Task<Message> EnterRoom(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! Room entered");
+      return await _bot.SendMessage(msg.Chat, "WOW! Room entered", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> ChangeRoom(Message msg)
+   private async Task<Message> ChangeRoom(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! Room changed");
+      return await _bot.SendMessage(msg.Chat, "WOW! Room changed", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> LeaveRoom(Message msg)
+   private async Task<Message> LeaveRoom(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! You left room");
+      return await _bot.SendMessage(msg.Chat, "WOW! You left room", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> AddPlaylist(Message msg)
+   private async Task<Message> AddPlaylist(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! You added playlist");
+      return await _bot.SendMessage(msg.Chat, "WOW! You added playlist", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> SendDeleteInline(Message msg)
+   private async Task<Message> SendDeleteInline(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! You started delete with inline keyboard");
+      return await _bot.SendMessage(msg.Chat, "WOW! You started delete with inline keyboard", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> TryDeletePlaylist(Message msg)
+   private async Task<Message> TryDeletePlaylist(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! You tried deleting a playlist");
+      return await _bot.SendMessage(msg.Chat, "WOW! You tried deleting a playlist", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> Combine(Message msg)
+   private async Task<Message> Combine(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! You combined playlists");
+      return await _bot.SendMessage(msg.Chat, "WOW! You combined playlists", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> SendArtists(Message msg)
+   private async Task<Message> SendArtists(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! You recieved artists list");
+      return await _bot.SendMessage(msg.Chat, "WOW! You recieved artists list", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> SendPlaylists(Message msg)
+   private async Task<Message> SendPlaylists(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! You recieved playlists list");
+      return await _bot.SendMessage(msg.Chat, "WOW! You recieved playlists list", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
-   async Task<Message> SendMembers(Message msg)
+   private async Task<Message> SendMembers(Message msg)
    {
-      return await _bot.SendMessage(msg.Chat, "WOW! You recieved members list");
+      return await _bot.SendMessage(msg.Chat, "WOW! You recieved members list", replyParameters: new ReplyParameters { MessageId = msg.Id });
    }
 
    // Process Inline Keyboard callback data
+   // TODO implement
    private async Task OnCallbackQuery(CallbackQuery callbackQuery)
    {
       _logger.LogInformation("Received inline keyboard callback from: {CallbackQueryId}", callbackQuery.Id);
