@@ -48,7 +48,6 @@ public class UpdateHandler : IUpdateHandler
          "/leave" => LeaveRoom(msg),
          "/add" => AddPlaylist(msg),
          "/delete" => SendDeleteInline(msg),
-         "/delete_id" => TryDeletePlaylist(msg),
          "/combine" => Combine(msg),
          "/artists" => SendArtists(msg),
          "/playlists" => SendPlaylists(msg),
@@ -79,7 +78,6 @@ public class UpdateHandler : IUpdateHandler
             /leave - Leave current room
             /add - Pass &lt;link&gt; to add a playlist to combination list by link
             /delete - See combination list and choose a playlist to delete
-            /delete_id - Pass &lt;playlistId&gt; to delete a playlist
             /combine - Update combined playlist
             /artists - Show all unique artists in current combined playlist
             /playlists - Show all playlists in combination list

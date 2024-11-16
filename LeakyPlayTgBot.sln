@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stateless", "stateless\src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeakyPlayTgBotNet", "LeakyPlayTgBotNet\LeakyPlayTgBotNet.csproj", "{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeakyPlayEntities", "LeakyPlayEntities\LeakyPlayEntities.csproj", "{354B619D-8465-4415-808A-982FA0260FA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{971DCDA4-0D60-4B25-AD51-AEB6E970FB72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{354B619D-8465-4415-808A-982FA0260FA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{354B619D-8465-4415-808A-982FA0260FA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{354B619D-8465-4415-808A-982FA0260FA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{354B619D-8465-4415-808A-982FA0260FA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
