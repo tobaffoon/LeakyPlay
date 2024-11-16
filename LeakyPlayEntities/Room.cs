@@ -2,9 +2,9 @@
 
 public class Room
 {
-   public long RoomId { get; set; }
-   public required string RoomName { get; set; }
-   public required string CommonPlaylistLink { get; set; }
-   public required string CommonPlaylistName { get; set; }
+   public long RoomId { get; init; }
+   public required string RoomName { get; init; }
+   public required string CommonPlaylistLink { get; init; }
+   public required string CommonPlaylistName { get; init; }
 
 }
