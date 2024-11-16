@@ -1,4 +1,4 @@
-namespace LeakyPlayTgBotNet.Rooms;
+namespace LeakyPlayTgBotNet.RoomsService;
 
 public interface IRoomsService
 {

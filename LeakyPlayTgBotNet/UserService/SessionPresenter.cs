@@ -1,6 +1,6 @@
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace LeakyPlayTgBotNet.UserState;
+namespace LeakyPlayTgBotNet.UserService;
 
 public static class SessionPresenter
 {

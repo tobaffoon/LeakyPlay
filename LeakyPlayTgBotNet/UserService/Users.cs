@@ -1,4 +1,4 @@
-namespace LeakyPlayTgBotNet.UserState;
+namespace LeakyPlayTgBotNet.UserService;
 
 public class Users
 {

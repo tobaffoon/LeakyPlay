@@ -1,7 +1,7 @@
-using LeakyPlayTgBotNet.Rooms;
+using LeakyPlayTgBotNet.RoomsService;
 using Stateless;
 
-namespace LeakyPlayTgBotNet.UserState;
+namespace LeakyPlayTgBotNet.UserService;
 
 /// <summary>
 /// User's session with bot. By itself it doesn't reflect room state (added and generated playlists, users). Also room can change.
