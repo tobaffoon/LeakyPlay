@@ -1,5 +1,3 @@
-using LeakyPlayEntities;
-
 namespace LeakyPlayTgBotNet.RoomsService;
 
 public interface IRoomService
@@ -8,7 +6,7 @@ public interface IRoomService
    /// Adds member to a room.
    /// </summary>
    /// <returns>True if member was added. False if member was already present.</returns>
-   bool AddMember(User user);
+   bool AddMember(long id, string? username);
    /// <summary>
    /// Removes member by id.
    /// </summary>
@@ -30,6 +28,7 @@ public interface IRoomService
    /// </summary>
    /// <returns>True if playlist was created. False otherwise, for example if combine list is empty.</returns>
    bool TryCombinePlaylists();
+   string GetCombinedPlaylistLink();
    string[] GetArtistsNames();
    string[] GetPlaylistsNames();
    string[] GetMembersUsernames();

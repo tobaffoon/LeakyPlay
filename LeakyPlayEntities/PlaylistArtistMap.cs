@@ -2,7 +2,7 @@
 
 public class PlaylistArtistMap
 {
-   public long PlaylistArtistMapId { get; set; }
-   public long PlaylistId { get; set; }
-   public required string ArtistName { get; set; }
+   public long PlaylistArtistMapId { get; init; }
+   public long PlaylistId { get; init; }
+   public required string ArtistName { get; init; }
 }

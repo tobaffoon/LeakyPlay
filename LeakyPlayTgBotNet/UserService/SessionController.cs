@@ -1,5 +1,8 @@
+using LeakyPlayEntities;
 using LeakyPlayTgBotNet.RoomsService;
 using Stateless;
+
+using State = LeakyPlayEntities.Session.State;
 
 namespace LeakyPlayTgBotNet.UserService;
 
@@ -8,9 +11,9 @@ namespace LeakyPlayTgBotNet.UserService;
 /// 
 /// Commands that do not change the 'state' (/artists for example) are not represented as triggers in state machine.
 /// </summary>
-internal class Session
+internal class SessionController
 {
-   public readonly long id;
+   public readonly User user;
    private readonly StateMachine<State, Trigger> _stateMachine = new StateMachine<State, Trigger>(State.Start);
    /// <summary>
    /// int param - roomId
@@ -21,26 +24,25 @@ internal class Session
    /// </summary>
    private readonly StateMachine<State, Trigger>.TriggerWithParameters<int> _chooseChangeRoomTrigger;
    /// <summary>
-   /// int param - playlistId chosen for deletion
+   /// string param - playlist link chosen for deletion
    /// </summary>
-   private readonly StateMachine<State, Trigger>.TriggerWithParameters<int> _chooseDeletePlaylistTrigger;
+   private readonly StateMachine<State, Trigger>.TriggerWithParameters<string> _chooseDeletePlaylistTrigger;
    // TODO: replace string with uri
    /// <summary>
    /// Uri - link to playlist
    /// </summary>
    private readonly StateMachine<State, Trigger>.TriggerWithParameters<string> _chooseAddPlaylistTrigger;
-   private readonly IRoomsService _rooms;
-   public Room? Room { get; private set; } = null;
+   private readonly IRoomsManagerService _rooms;
+   public IRoomService? CurrentRoom { get; private set; } = null;
    public int? DeletePlaylistPage { get; private set; } = null;
 
-   public Session(long id, IRoomsService roomsService)
+   public SessionController(User user, IRoomsManagerService roomsService)
    {
-      this.id = id;
+      this.user = user;
       _rooms = roomsService;
-
       _enterRoomTrigger = _stateMachine.SetTriggerParameters<int>(Trigger.EnterMainRoom);
       _chooseChangeRoomTrigger = _stateMachine.SetTriggerParameters<int>(Trigger.ChooseChangeRoom);
-      _chooseDeletePlaylistTrigger = _stateMachine.SetTriggerParameters<int>(Trigger.ChooseDeletePlaylist);
+      _chooseDeletePlaylistTrigger = _stateMachine.SetTriggerParameters<string>(Trigger.ChooseDeletePlaylist);
       _chooseAddPlaylistTrigger = _stateMachine.SetTriggerParameters<string>(Trigger.EnterAddPlaylist);
 
       // start
@@ -83,33 +85,38 @@ internal class Session
         .Permit(Trigger.Cancel, State.MainRoom);
    }
 
-
-
    private void OnEnterRoom(int newRoomId)
    {
-      bool roomExists = _rooms.TryGetRoom(newRoomId, out Room? newRoom);
+      bool roomExists = _rooms.TryGetRoom(newRoomId, out IRoomService? newRoom);
       if (!roomExists)
       {
          throw new ArgumentException($"Room with id: {newRoomId}, does not exist");
       }
 
-      Room = newRoom!;
-      Room.members.Add(id);
+      CurrentRoom = newRoom!;
+      CurrentRoom.AddMember(user.Id, user.Username);
    }
 
-   private void OnChooseChangeRoom(int NewRoomId)
+   // state entryActions don't check conditions as it's done by state machine
+   private void OnLeaveRoom()
    {
-
+      CurrentRoom!.TryRemoveMember(user.Id);
+      CurrentRoom = null;
    }
 
-   private void OnChooseDeletePlaylist(int PlaylistId)
+   private void OnChooseChangeRoom(int newRoomId)
    {
-
+      OnLeaveRoom();
+      OnEnterRoom(newRoomId);
    }
 
-   private void OnChooseAddPlaylist(string PlaylistLink)
+   private void OnChooseDeletePlaylist(string playlistLink)
    {
+      CurrentRoom!.TryDeletePlaylist(playlistLink);
+   }
 
+   private void OnChooseAddPlaylist(string playlistLink)
+   {
    }
 
    private void OnEnterAddPlaylist()
@@ -118,11 +125,6 @@ internal class Session
    }
 
    private void OnEnterDeletePlaylist()
-   {
-
-   }
-
-   private void OnLeaveRoom()
    {
 
    }
@@ -152,15 +154,6 @@ internal class Session
 
    }
 
-   private enum State
-   {
-      Start,
-      RoomEnter,
-      MainRoom,
-      DeletePlaylist,
-      AddPlaylistConfirm,
-      ChangeRoomConfirm
-   }
    private enum Trigger
    {
       StartBot,

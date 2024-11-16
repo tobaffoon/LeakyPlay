@@ -15,9 +15,19 @@ public class RoomService : IRoomService
       info = room;
    }
 
-   public bool AddMember(User user)
+   public bool AddMember(long id, string? username)
    {
-      return _members.Add(user);
+      if (_members.Any(user => user.Id == id))
+      {
+         return false;
+      }
+
+      _members.Add(new User
+      {
+         Id = id,
+         Username = username
+      });
+      return true;
    }
 
    public bool TryRemoveMember(long id)
@@ -77,5 +87,10 @@ public class RoomService : IRoomService
          }
          return $"@{user.Id}";
       }).ToArray();
+   }
+
+   public string GetCombinedPlaylistLink()
+   {
+      return info.CombinedPlaylistLink;
    }
 }

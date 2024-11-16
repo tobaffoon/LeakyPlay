@@ -2,7 +2,7 @@
 
 public class RoomUserMap
 {
-   public long RoomUserMapId { get; set; }
-   public long RoomId { get; set; }
-   public long UserId { get; set; }
+   public long RoomUserMapId { get; init; }
+   public long RoomId { get; init; }
+   public long UserId { get; init; }
 }

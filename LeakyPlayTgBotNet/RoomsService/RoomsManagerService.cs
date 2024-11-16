@@ -1,19 +1,27 @@
+using LeakyPlayEntities;
+
 namespace LeakyPlayTgBotNet.RoomsService;
 
 public class RoomsManagerService : IRoomsManagerService
 {
-   private readonly Dictionary<long, RoomService> _rooms = [];
-   public bool TryCreateRoom(long id, out RoomService room)
+   private readonly Dictionary<long, IRoomService> _rooms = [];
+   public bool TryCreateRoom(long id, string name, string combinedPlaylistName, out IRoomService room)
    {
-      bool present = _rooms.TryGetValue(id, out RoomService? presentRoom);
+      bool present = _rooms.TryGetValue(id, out IRoomService? presentRoom);
       if (present)
       {
          room = presentRoom!;
          return false;
       }
 
-      room = new RoomService(id);
-      _rooms[id] = room;
+      _rooms[id] = new RoomService(new Room
+      {
+         RoomId = id,
+         RoomName = name,
+         CombinedPlaylistLink = "[get link here]",
+         CombinedPlaylistName = combinedPlaylistName
+      });
+      room = _rooms[id];
       return true;
    }
 
@@ -22,7 +30,7 @@ public class RoomsManagerService : IRoomsManagerService
       return _rooms.Remove(id);
    }
 
-   public bool TryGetRoom(long id, out RoomService? room)
+   public bool TryGetRoom(long id, out IRoomService? room)
    {
       return _rooms.TryGetValue(id, out room);
    }

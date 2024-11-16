@@ -6,7 +6,7 @@ public interface IRoomsManagerService
    /// Tries to create a room.
    /// </summary>
    /// <returns>True if new room was created. False if it was present.</returns>
-   bool TryCreateRoom(long id, out RoomService room);
+   bool TryCreateRoom(long id, string name, string combinedPlaylistName, out IRoomService room);
    /// <summary>
    /// Tries to delete the room.
    /// </summary>
@@ -16,5 +16,5 @@ public interface IRoomsManagerService
    /// Tries to get a room by id.
    /// </summary>
    /// <returns>True if the room exists. False otherwise.</returns>
-   bool TryGetRoom(long id, out RoomService? room);
+   bool TryGetRoom(long id, out IRoomService? room);
 }
