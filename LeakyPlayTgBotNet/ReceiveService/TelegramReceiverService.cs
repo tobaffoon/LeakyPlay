@@ -4,20 +4,20 @@ using Telegram.Bot.Polling;
 namespace LeakyPlayTgBotNet.ReceiveService;
 
 /// <summary>
-/// An abstract class to compose Receiver Service and Update Handler classes
+/// A class to compose Receiver Service and Telegram client
 /// </summary>
 /// <typeparam name="TUpdateHandler">Update Handler to use in Update Receiver</typeparam>
-public abstract class ReceiverServiceBase<TUpdateHandler> : IReceiverService
+public class TelegramReceiverService<TUpdateHandler> : IReceiverService
     where TUpdateHandler : IUpdateHandler
 {
    private readonly ITelegramBotClient _botClient;
    private readonly IUpdateHandler _updateHandler;
-   private readonly ILogger<ReceiverServiceBase<TUpdateHandler>> _logger;
+   private readonly ILogger<TelegramReceiverService<TUpdateHandler>> _logger;
 
-   internal ReceiverServiceBase(
+   internal TelegramReceiverService(
        ITelegramBotClient botClient,
        TUpdateHandler updateHandler,
-       ILogger<ReceiverServiceBase<TUpdateHandler>> logger)
+       ILogger<TelegramReceiverService<TUpdateHandler>> logger)
    {
       _botClient = botClient;
       _updateHandler = updateHandler;
