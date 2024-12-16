@@ -11,10 +11,14 @@ namespace LeakyPlayTgBotNet.UserService
    /// 
    /// Commands that do not change the 'state' (/artists for example) are not represented as triggers in state machine.
    /// </summary>
-   internal class SessionController
+   public class SessionController
    {
       public readonly User user;
       private readonly StateMachine<State, Trigger> _stateMachine = new StateMachine<State, Trigger>(State.Start);
+      /// <summary>
+      /// int param - newRoomId, string - newRoomName
+      /// </summary>
+      private readonly StateMachine<State, Trigger>.TriggerWithParameters<int, string> _createRoomTrigger;
       /// <summary>
       /// int param - roomId
       /// </summary>
@@ -35,23 +39,27 @@ namespace LeakyPlayTgBotNet.UserService
       private readonly IRoomsManagerService _rooms;
       public IRoomService? CurrentRoom { get; private set; } = null;
       public int? DeletePlaylistPage { get; private set; } = null;
+      public State State => _stateMachine.State;
 
       public SessionController(User user, IRoomsManagerService roomsService)
       {
          this.user = user;
          _rooms = roomsService;
          _enterRoomTrigger = _stateMachine.SetTriggerParameters<int>(Trigger.EnterMainRoom);
+         _createRoomTrigger = _stateMachine.SetTriggerParameters<int, string>(Trigger.CreateNewRoom);
          _chooseChangeRoomTrigger = _stateMachine.SetTriggerParameters<int>(Trigger.ChooseChangeRoom);
          _chooseDeletePlaylistTrigger = _stateMachine.SetTriggerParameters<string>(Trigger.ChooseDeletePlaylist);
          _chooseAddPlaylistTrigger = _stateMachine.SetTriggerParameters<string>(Trigger.EnterAddPlaylist);
 
-         // start
+         // register
          _stateMachine.Configure(State.Start)
-             .Permit(Trigger.StartBot, State.RoomEnter);
+             .Permit(Trigger.Start, State.RoomEnter);
 
          // room entrance page
          _stateMachine.Configure(State.RoomEnter)
+           .PermitReentry(Trigger.CreateNewRoom)
            .Permit(Trigger.EnterMainRoom, State.MainRoom)
+           .OnEntryFrom(_createRoomTrigger, OnCreateRoom)
            .OnEntryFrom(Trigger.LeaveRoom, OnLeaveRoom);
 
          // main room page
@@ -68,7 +76,16 @@ namespace LeakyPlayTgBotNet.UserService
            .Permit(Trigger.EnterChangeRoom, State.ChangeRoomConfirm)
            .OnEntryFrom(_chooseChangeRoomTrigger, OnChooseChangeRoom)
            // leave room
-           .Permit(Trigger.LeaveRoom, State.RoomEnter);
+           .Permit(Trigger.LeaveRoom, State.RoomEnter)
+           // combine playlists
+           .PermitReentry(Trigger.CombinePlaylists)
+           .OnEntryFrom(Trigger.CombinePlaylists, OnGenerateCommon)
+           // get common artists
+           .PermitReentry(Trigger.GetCommonArtists)
+           .OnEntryFrom(Trigger.GetCommonArtists, OnCommonArtists)
+           // combine playlists
+           .PermitReentry(Trigger.GetAllPlaylists)
+           .OnEntryFrom(Trigger.GetAllPlaylists, OnAllPlaylist);
 
          _stateMachine.Configure(State.DeletePlaylist)
            .OnEntry(OnEnterDeletePlaylist)
@@ -85,16 +102,51 @@ namespace LeakyPlayTgBotNet.UserService
            .Permit(Trigger.Cancel, State.MainRoom);
       }
 
-      private void OnEnterRoom(int newRoomId)
+      public void Fire(Trigger trigger)
       {
-         bool roomExists = _rooms.TryGetRoom(newRoomId, out IRoomService? newRoom);
+         _stateMachine.Fire(trigger);
+      }
+
+      public void FireCreateRoom(int newRoomId, string newRoomName)
+      {
+         _stateMachine.Fire(_createRoomTrigger, newRoomId, newRoomName);
+      }
+
+      public void FireEnterRoom(int roomId)
+      {
+         _stateMachine.Fire(_enterRoomTrigger, roomId);
+      }
+
+      public void FireChangeRoom(int roomId)
+      {
+         _stateMachine.Fire(_chooseChangeRoomTrigger, roomId);
+      }
+
+      public void FireAddPlaylist(string playlistLink)
+      {
+         _stateMachine.Fire(_chooseAddPlaylistTrigger, playlistLink);
+      }
+
+      public void FireDeletePlaylist(string playlistLink)
+      {
+         _stateMachine.Fire(_chooseDeletePlaylistTrigger, playlistLink);
+      }
+
+      private void OnEnterRoom(int roomId)
+      {
+         bool roomExists = _rooms.TryGetRoom(roomId, out IRoomService? newRoom);
          if (!roomExists)
          {
-            throw new ArgumentException($"Room with id: {newRoomId}, does not exist");
+            throw new ArgumentException($"Room with id: {roomId}, does not exist");
          }
 
          CurrentRoom = newRoom!;
          CurrentRoom.AddMember(user.Id, user.Username);
+      }
+
+      private void OnCreateRoom(int newRoomId, string newRoomName)
+      {
+         _rooms.TryCreateRoom(newRoomId, newRoomName, "[CombinedPlaylistName]", out _);
       }
 
       // state entryActions don't check conditions as it's done by state machine
@@ -117,50 +169,45 @@ namespace LeakyPlayTgBotNet.UserService
 
       private void OnChooseAddPlaylist(string playlistLink)
       {
+         CurrentRoom!.TryAddPlaylist(user.Id, playlistLink, "[PlaylistName]");
       }
 
       private void OnEnterAddPlaylist()
       {
-
+         //present
       }
 
       private void OnEnterDeletePlaylist()
       {
-
+         //present
       }
 
       private void OnGenerateCommon()
       {
-
+         //present placeholder
       }
 
       private void OnCommonArtists()
       {
-
+         CurrentRoom!.GetArtistsNames();
       }
 
       private void OnAllPlaylist()
       {
-
+         CurrentRoom!.GetPlaylistsNames();
       }
 
-      private void OnAddPlaylist()
+      public enum Trigger
       {
-
-      }
-
-      private void OnChangeRoom()
-      {
-
-      }
-
-      private enum Trigger
-      {
-         StartBot,
+         Start,
          EnterMainRoom,
+         CreateNewRoom,
          EnterDeletePlaylist,
          ChooseDeletePlaylist,
          EnterAddPlaylist,
+         CombinePlaylists,
+         GetCommonArtists,
+         GetAllPlaylists,
          ChooseAddPlaylist,
          EnterChangeRoom,
          ChooseChangeRoom,

@@ -20,6 +20,6 @@
 
       public long Id { get; init; }
       public string? Username { get; init; }
-      public State SessionState { get; internal set; }
+      public State SessionState { get; set; }
    }
 }
