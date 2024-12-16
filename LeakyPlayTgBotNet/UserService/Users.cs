@@ -1,6 +1,10 @@
-namespace LeakyPlayTgBotNet.UserService;
-
-public class Users
+namespace LeakyPlayTgBotNet.UserService
 {
-   private readonly Dictionary<long, SessionController> _sessions = [];
+   public class Users
+   {
+      /// <summary>
+      /// Id to session of each user.
+      /// </summary>
+      private readonly Dictionary<long, SessionController> _sessions = [];
+   }
 }

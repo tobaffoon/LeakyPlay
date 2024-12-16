@@ -1,37 +1,38 @@
-using LeakyPlayEntities;
-
-namespace LeakyPlayTgBotNet.RoomsService;
-
-public class RoomsManagerService : IRoomsManagerService
+namespace LeakyPlayTgBotNet.RoomsService
 {
-   private readonly Dictionary<long, IRoomService> _rooms = [];
-   public bool TryCreateRoom(long id, string name, string combinedPlaylistName, out IRoomService room)
+   using LeakyPlayEntities;
+
+   public class RoomsManagerService : IRoomsManagerService
    {
-      bool present = _rooms.TryGetValue(id, out IRoomService? presentRoom);
-      if (present)
+      private readonly Dictionary<long, IRoomService> _rooms = [];
+      public bool TryCreateRoom(long id, string name, string combinedPlaylistName, out IRoomService room)
       {
-         room = presentRoom!;
-         return false;
+         bool present = _rooms.TryGetValue(id, out IRoomService? presentRoom);
+         if (present)
+         {
+            room = presentRoom!;
+            return false;
+         }
+
+         _rooms[id] = new RoomService(new Room
+         {
+            RoomId = id,
+            RoomName = name,
+            CombinedPlaylistLink = "[get link here]",
+            CombinedPlaylistName = combinedPlaylistName
+         });
+         room = _rooms[id];
+         return true;
       }
 
-      _rooms[id] = new RoomService(new Room
+      public bool TryDeleteRoom(long id)
       {
-         RoomId = id,
-         RoomName = name,
-         CombinedPlaylistLink = "[get link here]",
-         CombinedPlaylistName = combinedPlaylistName
-      });
-      room = _rooms[id];
-      return true;
-   }
+         return _rooms.Remove(id);
+      }
 
-   public bool TryDeleteRoom(long id)
-   {
-      return _rooms.Remove(id);
-   }
-
-   public bool TryGetRoom(long id, out IRoomService? room)
-   {
-      return _rooms.TryGetValue(id, out room);
+      public bool TryGetRoom(long id, out IRoomService? room)
+      {
+         return _rooms.TryGetValue(id, out room);
+      }
    }
 }

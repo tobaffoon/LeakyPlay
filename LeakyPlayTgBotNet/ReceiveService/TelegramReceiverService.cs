@@ -1,50 +1,51 @@
-using Telegram.Bot;
-using Telegram.Bot.Polling;
-
-namespace LeakyPlayTgBotNet.ReceiveService;
-
-/// <summary>
-/// A class to compose Receiver Service and Telegram client
-/// </summary>
-/// <typeparam name="TUpdateHandler">Update Handler to use in Update Receiver</typeparam>
-public class TelegramReceiverService<TUpdateHandler> : IReceiverService
-    where TUpdateHandler : IUpdateHandler
+namespace LeakyPlayTgBotNet.ReceiveService
 {
-   private readonly ITelegramBotClient _botClient;
-   private readonly IUpdateHandler _updateHandler;
-   private readonly ILogger<TelegramReceiverService<TUpdateHandler>> _logger;
-
-   internal TelegramReceiverService(
-       ITelegramBotClient botClient,
-       TUpdateHandler updateHandler,
-       ILogger<TelegramReceiverService<TUpdateHandler>> logger)
-   {
-      _botClient = botClient;
-      _updateHandler = updateHandler;
-      _logger = logger;
-   }
+   using Telegram.Bot;
+   using Telegram.Bot.Polling;
 
    /// <summary>
-   /// Start to service Updates with provided Update Handler class
+   /// A class to compose Receiver Service and Telegram client
    /// </summary>
-   /// <param name="cancellationToken"></param>
-   /// <returns></returns>
-   public async Task ReceiveAsync(CancellationToken cancellationToken)
+   /// <typeparam name="TUpdateHandler">Update Handler to use in Update Receiver</typeparam>
+   public class TelegramReceiverService<TUpdateHandler> : IReceiverService
+       where TUpdateHandler : IUpdateHandler
    {
-      // ToDo: we can inject ReceiverOptions through IOptions container
-      var receiverOptions = new ReceiverOptions()
+      private readonly ITelegramBotClient _botClient;
+      private readonly IUpdateHandler _updateHandler;
+      private readonly ILogger<TelegramReceiverService<TUpdateHandler>> _logger;
+
+      internal TelegramReceiverService(
+          ITelegramBotClient botClient,
+          TUpdateHandler updateHandler,
+          ILogger<TelegramReceiverService<TUpdateHandler>> logger)
       {
-         AllowedUpdates = [],
-         DropPendingUpdates = true,
-      };
+         _botClient = botClient;
+         _updateHandler = updateHandler;
+         _logger = logger;
+      }
 
-      var me = await _botClient.GetMe(cancellationToken);
-      _logger.LogInformation("Start receiving updates for {BotName}", me.Username ?? "Unnamed bot");
+      /// <summary>
+      /// Start to service Updates with provided Update Handler class
+      /// </summary>
+      /// <param name="cancellationToken"></param>
+      /// <returns></returns>
+      public async Task ReceiveAsync(CancellationToken cancellationToken)
+      {
+         // ToDo: we can inject ReceiverOptions through IOptions container
+         var receiverOptions = new ReceiverOptions()
+         {
+            AllowedUpdates = [],
+            DropPendingUpdates = true,
+         };
 
-      // Start receiving updates
-      await _botClient.ReceiveAsync(
-          updateHandler: _updateHandler,
-          receiverOptions: receiverOptions,
-          cancellationToken: cancellationToken);
+         var me = await _botClient.GetMe(cancellationToken);
+         _logger.LogInformation("Start receiving updates for {BotName}", me.Username ?? "Unnamed bot");
+
+         // Start receiving updates
+         await _botClient.ReceiveAsync(
+             updateHandler: _updateHandler,
+             receiverOptions: receiverOptions,
+             cancellationToken: cancellationToken);
+      }
    }
 }

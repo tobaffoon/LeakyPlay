@@ -1,6 +1,7 @@
-namespace LeakyPlayTgBotNet.TelegramBot;
-
-public class TgBotConfig
+namespace LeakyPlayTgBotNet.TelegramBot
 {
-   public string BotToken { get; init; } = default!;
+   public class TgBotConfig
+   {
+      public string BotToken { get; init; } = default!;
+   }
 }
