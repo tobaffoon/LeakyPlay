@@ -1,8 +1,12 @@
-﻿namespace LeakyPlayEntities;
-
-public class PlaylistArtistMap
+﻿namespace LeakyPlayEntities
 {
-   public long PlaylistArtistMapId { get; init; }
-   public long PlaylistId { get; init; }
-   public required string ArtistName { get; init; }
+   /// <summary>
+   /// Map a playlist to artists whose songs are in it.
+   /// </summary>
+   public class PlaylistArtistMap
+   {
+      public long PlaylistArtistMapId { get; init; }
+      public long PlaylistId { get; init; }
+      public required string ArtistName { get; init; }
+   }
 }

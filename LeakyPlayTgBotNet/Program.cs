@@ -25,7 +25,6 @@ namespace LeakyPlayTgBotNet
                   .RemoveAllLoggers()
                   .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
                   {
-                     // TODO: redo config creation using service provider
                      string? botToken = config.GetValue<string>(ConfigTokenKey);
                      ArgumentNullException.ThrowIfNull(botToken);
                      TgBotConfig botConfig = new TgBotConfig
